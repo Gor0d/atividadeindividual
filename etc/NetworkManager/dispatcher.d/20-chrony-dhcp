@@ -1,0 +1,58 @@
+#!/bin/sh
+# This is a NetworkManager dispatcher script for chronyd to update
+# its NTP sources passed from DHCP options. Note that this script is
+# specific to NetworkManager-dispatcher due to use of the
+# DHCP4_NTP_SERVERS environment variable.
+
+export LC_ALL=C
+
+interface=$1
+action=$2
+
+helper=/usr/libexec/chrony-helper
+default_server_options=iburst
+server_dir=/run/chrony-helper
+
+dhcp_server_tmpfile=$server_dir/tmp-nm-dhcp.$interface
+dhcp_server_file=$server_dir/nm-dhcp.$interface
+# DHCP4_NTP_SERVERS is passed from DHCP options by NetworkManager.
+nm_dhcp_servers=$DHCP4_NTP_SERVERS
+
+[ -f /etc/sysconfig/network ] && . /etc/sysconfig/network
+[ -f /etc/sysconfig/network-scripts/ifcfg-"${interface}" ] && \
+    . /etc/sysconfig/network-scripts/ifcfg-"${interface}"
+
+add_servers_from_dhcp() {
+    rm -f "$dhcp_server_file"
+
+    # Remove servers saved by the dhclient script before it detected NM.
+    rm -f "/var/lib/dhclient/chrony.servers.$interface"
+
+    # Don't add NTP servers if PEERNTP=no specified; return early.
+    [ "$PEERNTP" = "no" ] && return
+
+    # Create the directory with correct SELinux context.
+    $helper create-helper-directory > /dev/null 2>&1
+
+    for server in $nm_dhcp_servers; do
+        echo "$server ${NTPSERVERARGS:-$default_server_options}" >> "$dhcp_server_tmpfile"
+    done
+    [ -e "$dhcp_server_tmpfile" ] && mv "$dhcp_server_tmpfile" "$dhcp_server_file"
+
+    $helper update-daemon > /dev/null 2>&1 || :
+}
+
+clear_servers_from_dhcp() {
+    if [ -f "$dhcp_server_file" ]; then
+        rm -f "$dhcp_server_file"
+        $helper update-daemon > /dev/null 2>&1 || :
+    fi
+}
+
+if [ "$action" = "up" ] || [ "$action" = "dhcp4-change" ]; then
+    add_servers_from_dhcp
+elif [ "$action" = "down" ]; then
+    clear_servers_from_dhcp
+fi
+
+exit 0

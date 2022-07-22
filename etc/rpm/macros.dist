@@ -1,0 +1,7 @@
+# dist macros.
+
+%rhel 8
+%dist .el8
+%el8 1
+%oraclelinux 8
+%ol8 1
