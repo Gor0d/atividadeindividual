@@ -33,7 +33,7 @@ Após apertar em "Done", aparecerá um campo chamado "Summary of changes", aceit
 # Configurando a rede # 
 No campo "Network & Host name", habilite a conexão da internet no campo demarcado como "OFF", clique nela para selecionar e espere ficar azul, indicando a mudança para "ON". Após esse processo podemos também alterar o hostname diretamente, no canto inferior esquerdo da tela e alterar o "localhost".
 
-#Criando usuário#
+# Criando usuário #
 Ao retornar no menu principal de instalação do Linux, você notará nos campos inferiores sobre "Root Password" e "User Creation". Para criar um usuário para acessar o 
 terminal, acesse "User creation". 
 
