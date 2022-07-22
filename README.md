@@ -13,10 +13,17 @@
 ##### Instalação do Linux #####
 - Utilize a última versão estável disponibilizada do Oracle Linux: OracleLinux-R8-U6-x86_64-dvd.iso
 
-- Particionamento do disco - LVMs
+# Particionamento do disco - LVMs #
 Na instalação do SO Oracle Linux, em INSTALLATION DESTINATION, selecionar o LOCAL STANDARD DISKS, e em STORAGE CONFIGURATION selecionar a opção CUSTOM. Clique em DONE.
 
-Surgirá uma nova tela MANUAL PARTITIONING. Inclua 6 repartições: /boot xfs /swap swap /home xfs /var xfs /tmp xfs / xfs
+- Surgirá uma nova tela MANUAL PARTITIONING. Inclua 6 repartições, no processo nós distribuimos a memória disponpível em:
+
+/boot xfs - 10 gb
+/swap swap - 10 gb
+/home xfs - 10 gb
+/var xfs - 10 gb
+/tmp xfs - 10 gb
+/ xfs - 10 gb
 
 #### No terminal ####
 # Antes de tudo! #
@@ -25,10 +32,10 @@ Instale como editor de texto o "Nano"! Para isso realize o "sudo yum install nan
 Rede da máquina virtual em CIDR/24
 Instale o pacote net-tools e network-scripts: sudo yum install net-tools e/ou sudo dnf install network-scripts
 
-Verifique a máscara de rede (255.255.255.0): if config -a
+# Verifique a máscara de rede (255.255.255.0): if config -a #
 
 ### Configurando Hostname ###
-Edite o arquivo /etc/hosts: sudo vi /etc/hosts
+Edite o arquivo /etc/hosts: sudo nano /etc/hostname
 
 Reinicie a máquina: reboot
 
@@ -54,7 +61,7 @@ Instale o software SSH: sudo yum install openssh-server
 
 Ative o SSH para iniciá-lo automaticamente junto ao sistema: sudo systemctl enable sshd
 
-Bloqueando o acesso SSH para o root
+# Bloqueando o acesso SSH para o root #
 Edite o arquivo sshd_config: sudo nano /etc/ssh/sshd_config
 
 Altere a linha "PermitRootLogin", substituindo o "yes" por "no".
