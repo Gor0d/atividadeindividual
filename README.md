@@ -1,7 +1,7 @@
 ### atividadeindividual ###
 - Esse repositório tem como objetivo versionar a atividade proposta pela PB Compass - DevSecOps!
 
-Especificação das máquinas:
+#Especificação das máquinas:#
 # Servidor: #
 - Memória RAM: 11 gb
 - Memória HD: 113 GB (101 GB da VDI1 e 12 gb da VDI2).
